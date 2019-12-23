@@ -39,15 +39,16 @@ class MQTT_consumer : MqttCallback {
         influx.query(Query("CREATE RETENTION POLICY $rpName ON $dbName DURATION 30h REPLICATION 2 SHARD DURATION 30m DEFAULT",dbName,false))
         influx.setRetentionPolicy(rpName)
 
-        var payload = String(mqttMessage.payload).split("\t")
+        val payload = String(mqttMessage.payload).split("\t")
 
-        var time=payload[0].toLong()
-        var puissance=payload[0].toLong()
-        var conso_tot=payload[0].toLong()
+        val time=payload[0].toLong()
+        val compteur_id=payload[1].toLong()
+        val puissance=payload[2].toLong()
+        val conso_tot=payload[3].toLong()
 
 
 
-        val point=Point.measurement("conso")
+        val point=Point.measurement(compteur_id.toString())
             .time(time, TimeUnit.SECONDS)
             .addField("puissance", puissance)
             .addField("conso_tot", conso_tot)
